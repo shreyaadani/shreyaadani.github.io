@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shreyaa Dani — AI & ML Engineer | MS CS UMass Amherst</title>
+<meta name="description" content="Software engineer specialising in AI systems, LLM pipelines and backend infrastructure. Research Extern at Cisco. Available May 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white:#FAFAF8; --cream:#F4EFE6; --cream-2:#EDE7DC;
+  --ink:#1C1917; --ink-2:#3D3832; --muted:#8A847C; --rule:#E4DDD3;
+  --crimson:#8B1A2B;
+  --cl:rgba(139,26,43,0.06); --cm:rgba(139,26,43,0.18);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Outfit',system-ui,sans-serif;
+  --max:1080px; --pad:clamp(1.5rem,5vw,3.5rem); --gap:clamp(3rem,6vw,6rem);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--ink);font-family:var(--sans);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+
+/* CURSOR */
+#cur{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--crimson);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .15s,opacity .15s;}
+#cur-r{position:fixed;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--crimson);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.3;transition:width .2s,height .2s,opacity .2s;}
+.cx #cur{transform:translate(-50%,-50%) scale(0);opacity:0;}
+.cx #cur-r{width:52px;height:52px;opacity:.15;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.4rem var(--pad);background:rgba(250,250,248,.93);backdrop-filter:blur(16px);border-bottom:1px solid transparent;transition:border-color .3s;}
+nav.scrolled{border-color:var(--rule);}
+.nav-name{font-family:var(--serif);font-size:1.1rem;font-weight:400;}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s;cursor:none;}
+.nav-links a:hover{color:var(--crimson);}
+.nav-hire{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--white);background:var(--crimson);padding:.45rem 1.2rem;cursor:none;transition:opacity .2s;}
+.nav-hire:hover{opacity:.85;}
+
+/* HERO */
+#hero{min-height:100svh;display:grid;grid-template-columns:1fr 1fr;padding-top:5rem;}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:var(--gap) var(--pad);border-right:1px solid var(--rule);}
+.hero-eyebrow{font-size:.67rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--crimson);margin-bottom:1.75rem;opacity:0;animation:up .5s ease .1s forwards;}
+.hero-name{font-family:var(--serif);font-size:clamp(3rem,5.5vw,5.2rem);font-weight:300;line-height:.98;letter-spacing:-.01em;color:var(--ink);margin-bottom:.75rem;opacity:0;animation:up .7s ease .25s forwards;}
+.hero-name em{font-style:italic;color:var(--crimson);}
+.hero-title{font-size:clamp(.85rem,1.1vw,.97rem);font-weight:300;color:var(--muted);margin-bottom:2.25rem;letter-spacing:.02em;opacity:0;animation:up .6s ease .4s forwards;}
+.hero-bio{font-size:.975rem;line-height:1.88;color:var(--ink-2);max-width:480px;margin-bottom:2.25rem;opacity:0;animation:up .6s ease .55s forwards;}
+.hero-bio strong{color:var(--ink);font-weight:600;}
+.hero-award{display:inline-flex;align-items:center;gap:.5rem;font-size:.66rem;font-weight:500;letter-spacing:.07em;color:var(--crimson);border:1px solid var(--cm);background:var(--cl);padding:.38rem .9rem;margin-bottom:2.25rem;opacity:0;animation:up .5s ease .65s forwards;}
+.hero-ctas{display:flex;gap:1rem;align-items:center;opacity:0;animation:up .5s ease .8s forwards;}
+.btn-fill{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--white);padding:.85rem 2rem;cursor:none;transition:background .2s,transform .15s;}
+.btn-fill:hover{background:var(--crimson);transform:translateY(-1px);}
+.btn-ghost{font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--rule);padding-bottom:2px;cursor:none;transition:color .2s,border-color .2s;}
+.btn-ghost:hover{color:var(--crimson);border-color:var(--crimson);}
+.hero-right{position:relative;overflow:hidden;}
+.hero-right img{width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;animation:imgfade .9s ease .3s forwards;}
+.hero-right::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(250,250,248,.1),transparent 25%);pointer-events:none;}
+
+/* STATS */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.stat{padding:1.75rem clamp(1rem,2.5vw,2.25rem);border-right:1px solid var(--rule);transition:background .2s;}
+.stat:last-child{border-right:none;}
+.stat:hover{background:var(--cl);}
+.stat-n{font-family:var(--serif);font-size:clamp(1.8rem,2.8vw,2.7rem);font-weight:300;color:var(--ink);line-height:1;margin-bottom:.3rem;}
+.stat-n span{font-size:.9rem;color:var(--crimson);font-family:var(--sans);}
+.stat-l{font-size:.6rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);line-height:1.5;}
+
+/* SHARED */
+.section{padding:var(--gap) var(--pad);}
+.sec-in{max-width:var(--max);margin:0 auto;}
+.sec-label{font-size:.62rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--crimson);margin-bottom:.9rem;display:flex;align-items:center;gap:.6rem;}
+.sec-label::after{content:'';width:28px;height:1px;background:var(--crimson);opacity:.4;}
+.sec-h{font-family:var(--serif);font-size:clamp(1.85rem,3.2vw,2.9rem);font-weight:300;line-height:1.1;letter-spacing:-.01em;color:var(--ink);margin-bottom:3rem;}
+.sec-h em{font-style:italic;color:var(--crimson);}
+
+/* ABOUT */
+#about{background:var(--cream);}
+.about-g{display:grid;grid-template-columns:1.2fr 1fr;gap:5rem;align-items:start;}
+.about-text p{font-size:.975rem;line-height:1.9;color:var(--ink-2);margin-bottom:1.4rem;}
+.about-text p:last-child{margin-bottom:0;}
+.about-text strong{color:var(--ink);font-weight:600;}
+.aside{display:flex;flex-direction:column;}
+.aside-b{padding:1.35rem 0;border-bottom:1px solid var(--rule);}
+.aside-b:first-child{border-top:1px solid var(--rule);}
+.aside-h{font-size:.6rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.aside-t{font-family:var(--serif);font-size:.98rem;font-style:italic;font-weight:300;color:var(--ink);line-height:1.6;}
+.tags{display:flex;flex-wrap:wrap;gap:.32rem;}
+.tag{font-size:.62rem;font-weight:500;letter-spacing:.04em;padding:.26rem .68rem;border:1px solid var(--rule);color:var(--muted);transition:border-color .2s,color .2s,background .2s;cursor:default;}
+.tag:hover{border-color:var(--cm);color:var(--crimson);background:var(--cl);}
+
+/* EDUCATION */
+#education{background:var(--white);}
+.edu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+.edu-card{border:1px solid var(--rule);padding:2.25rem;transition:border-color .25s,background .25s,transform .2s;}
+.edu-card:hover{border-color:var(--cm);background:var(--cl);transform:translateY(-2px);}
+.edu-year{font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;}
+.edu-school{font-family:var(--serif);font-size:1.45rem;font-weight:400;color:var(--ink);margin-bottom:.3rem;line-height:1.2;}
+.edu-deg{font-size:.87rem;color:var(--ink-2);margin-bottom:.65rem;}
+.edu-gpa{display:inline-block;font-size:.63rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .7rem;background:var(--cl);color:var(--crimson);border:1px solid var(--cm);margin-bottom:1rem;}
+.edu-list{list-style:none;display:flex;flex-direction:column;gap:.32rem;margin-bottom:.85rem;}
+.edu-list li{font-size:.82rem;color:var(--ink-2);padding-left:.9rem;position:relative;}
+.edu-list li::before{content:'·';position:absolute;left:0;color:var(--crimson);font-size:1.1rem;line-height:1;}
+.certs{display:flex;flex-wrap:wrap;gap:.32rem;}
+.cert{font-size:.59rem;font-weight:500;letter-spacing:.04em;padding:.22rem .62rem;border:1px solid var(--rule);color:var(--muted);}
+
+/* EXPERIENCE */
+#experience{background:var(--cream);}
+.exp-item{display:grid;grid-template-columns:195px 1fr;gap:3rem;padding:2.75rem 0;border-bottom:1px solid var(--rule);position:relative;}
+.exp-item:first-child{border-top:1px solid var(--rule);}
+.exp-item::before{content:'';position:absolute;left:calc(-1 * var(--pad));right:calc(-1 * var(--pad));top:0;bottom:0;background:var(--cl);opacity:0;transition:opacity .25s;pointer-events:none;}
+.exp-item:hover::before{opacity:1;}
+.exp-item>*{position:relative;z-index:1;}
+.exp-period{font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.exp-co{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--ink);margin-bottom:.2rem;}
+.exp-loc{font-size:.68rem;color:var(--muted);margin-bottom:.75rem;}
+.exp-badge{display:inline-block;font-size:.57rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:.2rem .62rem;border:1px solid var(--rule);color:var(--muted);}
+.exp-badge.on{border-color:var(--cm);color:var(--crimson);background:var(--cl);}
+.exp-role{font-size:.98rem;font-weight:600;color:var(--ink);margin-bottom:.8rem;}
+.pills{display:flex;flex-wrap:wrap;gap:.32rem;margin-bottom:1.1rem;}
+.pill{font-size:.59rem;font-weight:600;letter-spacing:.04em;padding:.23rem .7rem;background:var(--cream-2);color:var(--ink-2);border:1px solid var(--rule);}
+.pill.hi{background:var(--cl);color:var(--crimson);border-color:var(--cm);}
+.buls{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+.buls li{font-size:.88rem;line-height:1.78;color:var(--ink-2);padding-left:1.1rem;position:relative;}
+.buls li::before{content:'—';position:absolute;left:0;color:var(--crimson);font-size:.72rem;top:.22rem;}
+.buls li strong{color:var(--ink);font-weight:600;}
+.award-row{display:inline-flex;align-items:center;gap:.4rem;margin-top:.9rem;font-size:.62rem;font-weight:600;letter-spacing:.07em;color:var(--crimson);border:1px solid var(--cm);background:var(--cl);padding:.28rem .78rem;}
+
+/* PROJECTS */
+#projects{background:var(--white);}
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+.proj-card{background:var(--white);padding:2.25rem;border:1px solid var(--rule);position:relative;overflow:hidden;cursor:none;transition:border-color .25s,transform .2s,box-shadow .25s;}
+.proj-card:hover{border-color:var(--cm);transform:translateY(-3px);box-shadow:0 8px 32px rgba(139,26,43,.07);}
+.proj-num{font-size:.58rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.35rem;}
+.proj-badge{display:inline-block;font-size:.56rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:.18rem .62rem;border:1px solid var(--cm);color:var(--crimson);background:var(--cl);margin-bottom:.75rem;}
+.proj-badge.n{border-color:var(--rule);color:var(--muted);background:transparent;}
+.proj-title{font-family:var(--serif);font-size:1.28rem;font-weight:400;color:var(--ink);margin-bottom:.65rem;line-height:1.25;}
+.proj-desc{font-size:.86rem;line-height:1.78;color:var(--ink-2);margin-bottom:1.35rem;}
+.proj-stack{display:flex;flex-wrap:wrap;gap:.32rem;}
+.ptag{font-size:.59rem;font-weight:500;letter-spacing:.04em;padding:.18rem .55rem;border:1px solid var(--rule);color:var(--muted);}
+.proj-arr{position:absolute;bottom:1.5rem;right:1.75rem;font-size:1.1rem;color:var(--rule);transition:color .2s,transform .2s;}
+.proj-card:hover .proj-arr{color:var(--crimson);transform:translate(3px,-3px);}
+
+/* SKILLS */
+#skills{background:var(--cream);}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule);}
+.sc{padding:1.85rem;border-right:1px solid var(--rule);}
+.sc:last-child{border-right:none;}
+.sc:nth-child(n+4){border-top:1px solid var(--rule);}
+.sct{font-size:.6rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--crimson);margin-bottom:1rem;padding-bottom:.65rem;border-bottom:1px solid var(--rule);}
+.sl{list-style:none;display:flex;flex-direction:column;}
+.sl li{font-size:.85rem;color:var(--ink-2);padding:.42rem 0;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:.5rem;transition:color .18s,padding-left .18s;cursor:default;}
+.sl li:last-child{border-bottom:none;}
+.sl li:hover{color:var(--crimson);padding-left:.32rem;}
+.sl li::before{content:'·';color:var(--crimson);font-size:1.1rem;line-height:.8;flex-shrink:0;}
+.sl li.s{color:var(--ink);font-weight:500;}
+
+/* RECOMMENDATIONS */
+#recommendations{background:var(--white);}
+.recs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.rec-card{border:1px solid var(--rule);padding:2.25rem;display:flex;flex-direction:column;gap:1.1rem;transition:border-color .25s,background .25s,transform .2s;}
+.rec-card:hover{border-color:var(--cm);background:var(--cl);transform:translateY(-2px);}
+.rec-qm{font-family:var(--serif);font-size:3.2rem;font-weight:300;color:var(--crimson);line-height:.8;opacity:.35;margin-bottom:-.4rem;}
+.rec-text{font-size:.9rem;line-height:1.82;color:var(--ink-2);font-style:italic;flex:1;}
+.rec-text strong{color:var(--crimson);font-style:normal;font-weight:600;}
+.rec-author{border-top:1px solid var(--rule);padding-top:.9rem;}
+.rec-name{font-size:.86rem;font-weight:600;color:var(--ink);margin-bottom:.18rem;}
+.rec-role{font-size:.7rem;color:var(--muted);line-height:1.45;}
+.rec-src{display:inline-block;margin-top:.45rem;font-size:.59rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--crimson);border-bottom:1px solid var(--cm);cursor:none;}
+
+/* CREATIVES */
+#creatives{background:var(--cream);}
+.cr-intro{font-size:.965rem;line-height:1.85;color:var(--ink-2);max-width:540px;margin-bottom:2.75rem;}
+.cr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.cr-slot{border:1.5px dashed var(--rule);padding:2.15rem 1.85rem;display:flex;flex-direction:column;gap:.65rem;transition:border-color .2s,background .2s;}
+.cr-slot:hover{border-color:var(--cm);background:var(--cl);}
+.cr-icon{font-size:1.45rem;}
+.cr-title{font-family:var(--serif);font-size:1.08rem;font-weight:400;color:var(--ink);}
+.cr-desc{font-size:.81rem;line-height:1.72;color:var(--muted);}
+.cr-soon{display:inline-block;margin-top:.35rem;font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);padding:.18rem .6rem;}
+
+/* CONTACT */
+#contact{background:var(--white);}
+.cg{display:grid;grid-template-columns:1.1fr 1fr;gap:6rem;align-items:start;}
+.c-head{font-family:var(--serif);font-size:clamp(2.3rem,4.2vw,3.7rem);font-weight:300;line-height:1.05;letter-spacing:-.015em;color:var(--ink);margin-bottom:1.35rem;}
+.c-head em{font-style:italic;color:var(--crimson);}
+.c-sub{font-size:.965rem;line-height:1.85;color:var(--ink-2);margin-bottom:1.65rem;}
+.c-sub strong{color:var(--ink);font-weight:600;}
+.open-b{display:inline-block;font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.55rem .95rem;border:1px solid var(--rule);color:var(--muted);}
+.open-b span{color:var(--crimson);}
+.clinks{display:flex;flex-direction:column;}
+.clink{display:flex;align-items:center;gap:1.2rem;padding:.95rem 1.2rem;border:1px solid var(--rule);margin-bottom:-1px;color:var(--ink-2);cursor:none;transition:border-color .2s,background .2s,color .2s;}
+.clink:hover{border-color:var(--cm);background:var(--cl);color:var(--ink);}
+.ci{width:17px;text-align:center;font-size:.7rem;color:var(--muted);flex-shrink:0;transition:color .2s;}
+.clink:hover .ci{color:var(--crimson);}
+.cl-t{flex:1;font-size:.78rem;letter-spacing:.02em;}
+.ca{font-size:.82rem;color:var(--rule);transition:transform .2s,color .2s;}
+.clink:hover .ca{color:var(--crimson);transform:translate(3px,-3px);}
+
+/* FOOTER */
+footer{padding:1.65rem var(--pad);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;background:var(--cream);}
+.fl{font-family:var(--serif);font-size:.98rem;font-style:italic;color:var(--muted);}
+.fr{font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--rule);}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease;}
+.rv.in{opacity:1;transform:none;}
+
+@keyframes up{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+@keyframes imgfade{from{opacity:0;}to{opacity:1;}}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  #hero{grid-template-columns:1fr;}
+  .hero-right{height:60vw;min-height:300px;}
+  .hero-left{border-right:none;border-bottom:1px solid var(--rule);}
+  .stats-bar{grid-template-columns:repeat(2,1fr);}
+  .stat:nth-child(2){border-right:none;}
+  .stat:nth-child(3){border-top:1px solid var(--rule);}
+  .about-g,.cg{grid-template-columns:1fr;gap:2.5rem;}
+  .edu-grid,.proj-grid,.recs-grid,.cr-grid{grid-template-columns:1fr;}
+  .exp-item{grid-template-columns:1fr;gap:1.1rem;}
+  .exp-item::before{left:-1.5rem;right:-1.5rem;}
+  .sg{grid-template-columns:1fr;}
+  .sc{border-right:none;border-bottom:1px solid var(--rule);}
+  .sc:last-child{border-bottom:none;}
+  .sc:nth-child(n+4){border-top:none;}
+  .nav-links{display:none;}
+}
+@media(max-width:600px){
+  .stats-bar{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-name">Shreyaa Dani</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#experience">Work</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#recommendations">Reviews</a></li>
+    <li><a href="#creatives">Creatives</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:sdani@umass.edu" class="nav-hire">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Available May 2026 · Open to full-time roles</p>
+    <h1 class="hero-name">Shreyaa<br><em>Dani.</em></h1>
+    <p class="hero-title">AI & ML Engineer &nbsp;·&nbsp; Research Extern at Cisco &nbsp;·&nbsp; MS CS UMass Amherst</p>
+    <p class="hero-bio">I went from <strong>enterprise backend at IBM</strong> to shipping LLM pipelines at Chewy that process <strong>14K+ prescriptions weekly</strong> and save <strong>$1.4M a year</strong>. Now I'm a <strong>Research Extern at Cisco</strong> under Prof. Andrew McCallum, building adaptive monitoring for LLM agents. I redesign the architecture before I write the first line — not perfectionism, just how good systems get built.</p>
+    <div class="hero-award">🏆 Runner-Up &amp; "Most Innovative Use of AI" — Chewy Unbound: Innovator's Arena 2025</div>
+    <div class="hero-ctas">
+      <a href="#experience" class="btn-fill">See My Work</a>
+      <a href="assets/resume.pdf" class="btn-ghost" target="_blank">Download Résumé</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="assets/photo.jpg" alt="Shreyaa Dani at a gallery" loading="eager">
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat rv"><div class="stat-n">$1.4<span>M</span></div><div class="stat-l">Annual savings<br>shipped at Chewy</div></div>
+  <div class="stat rv"><div class="stat-n">14<span>K+</span></div><div class="stat-l">Prescriptions<br>processed weekly</div></div>
+  <div class="stat rv"><div class="stat-n">95.5<span>%</span></div><div class="stat-l">XGBoost accuracy<br>in production</div></div>
+  <div class="stat rv"><div class="stat-n">4.0</div><div class="stat-l">Graduate GPA —<br>UMass Amherst</div></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="sec-in">
+    <p class="sec-label">About</p>
+    <h2 class="sec-h rv">The mind <em>behind the metrics.</em></h2>
+    <div class="about-g rv">
+      <div class="about-text">
+        <p>I'm finishing my Master's in Computer Science at UMass Amherst — but the real education started at <strong>IBM at 21</strong>, deep in enterprise backend systems, learning what production means when 500 people depend on your code not breaking on a Tuesday at 3am.</p>
+        <p>Then Chewy handed me a blank canvas and a hard problem. I didn't build just one thing — I built the OCR pipeline, the LLM extraction layer, the validation engine, the clinical knowledge graph in AWS Neptune, the approval prediction model, and the veterinary chatbot. Shipped to production. <strong>$1.4M saved. 92% user satisfaction. Runner-up at Chewy's Innovator's Arena.</strong></p>
+        <p>Now I'm a <strong>Research Extern at Cisco</strong> under Prof. Andrew McCallum, studying adaptive monitoring and evaluation strategies for LLM agents — because if you're deploying AI in critical systems, someone should verify it's doing what you think it is.</p>
+        <p>I also <strong>represent 400+ CS graduate students</strong> as a GSS Senator at UMass, serve on the ICT Council, and TA a graduate-level optimisation course. City kid. Chronic overthinker. The person already three steps ahead, trying to find a polite way to say so.</p>
+      </div>
+      <div class="aside">
+        <div class="aside-b"><p class="aside-h">Currently</p><p class="aside-t">Research Extern at Cisco · TA, CS651 · GSS Senator, UMass CS · Interviewing for full-time roles from May 2026.</p></div>
+        <div class="aside-b"><p class="aside-h">Superpower</p><p class="aside-t">Sees patterns others miss. Holds the entire system in her head while others are still reading the ticket.</p></div>
+        <div class="aside-b"><p class="aside-h">Looking for</p><p class="aside-t">Hard problems. Strong engineering culture. Compensation that matches the output. AI/ML, backend, or research engineering.</p></div>
+        <div class="aside-b"><p class="aside-h">Outside the IDE</p><div class="tags"><span class="tag">Music</span><span class="tag">Dance</span><span class="tag">Anime</span><span class="tag">Manga</span><span class="tag">Games</span><span class="tag">Art Museums</span><span class="tag">TV</span><span class="tag">TikTok spirals</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="section">
+  <div class="sec-in">
+    <p class="sec-label">Education</p>
+    <h2 class="sec-h rv">The <em>foundation.</em></h2>
+    <div class="edu-grid rv">
+      <div class="edu-card">
+        <p class="edu-year">Sep 2024 — May 2026</p>
+        <h3 class="edu-school">University of Massachusetts Amherst</h3>
+        <p class="edu-deg">Master of Science, Computer Science</p>
+        <span class="edu-gpa">GPA 4.0 / 4.0</span>
+        <ul class="edu-list">
+          <li>CS651 — Optimisation in Computer Science (TA)</li>
+          <li>Distributed Systems &amp; Cloud Computing</li>
+          <li>Machine Learning &amp; Deep Learning</li>
+          <li>Advanced Algorithms</li>
+        </ul>
+        <div class="certs">
+          <span class="cert">Research Extern — Cisco</span>
+          <span class="cert">GSS Senator — CS Dept</span>
+          <span class="cert">ICT Council Member</span>
+        </div>
+      </div>
+      <div class="edu-card">
+        <p class="edu-year">2018 — 2022</p>
+        <h3 class="edu-school">Vellore Institute of Technology, Bhopal</h3>
+        <p class="edu-deg">Bachelor of Technology, Computer Science &amp; Engineering</p>
+        <span class="edu-gpa">GPA 8.7 / 10</span>
+        <ul class="edu-list">
+          <li>Data Structures &amp; Algorithms</li>
+          <li>Database Management Systems</li>
+          <li>Natural Language Processing</li>
+          <li>Software Engineering</li>
+        </ul>
+        <div class="certs">
+          <span class="cert">Microsoft Azure Fundamentals</span>
+          <span class="cert">IBM Agile Explorer</span>
+          <span class="cert">Enterprise Design Thinking</span>
+          <span class="cert">Healthcare Insights — Bronze</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="section">
+  <div class="sec-in">
+    <p class="sec-label">Experience</p>
+    <h2 class="sec-h rv">Where I've <em>left a mark.</em></h2>
+
+    <div class="exp-item rv">
+      <div><p class="exp-period">Jan 2026 — Present</p><p class="exp-co">Cisco</p><p class="exp-loc">Remote</p><span class="exp-badge on">Graduate Research Extern</span></div>
+      <div>
+        <p class="exp-role">Graduate Research Extern — LLM Agent Monitoring</p>
+        <div class="pills"><span class="pill hi">Cisco collaboration</span><span class="pill hi">Prof. Andrew McCallum</span><span class="pill">LLM Agents</span><span class="pill">Adaptive Monitoring</span></div>
+        <ul class="buls">
+          <li>Researching <strong>adaptive monitoring and evaluation strategies for LLM-based agents</strong> under Prof. Andrew McCallum, in direct collaboration with Cisco.</li>
+          <li>Building systems to measure and verify agent behaviour in production — treating model trustworthiness as an empirical, measurable property.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item rv">
+      <div><p class="exp-period">Feb 2026 — Present</p><p class="exp-co">UMass Amherst</p><p class="exp-loc">Amherst, MA</p><span class="exp-badge on">Teaching Assistant</span></div>
+      <div>
+        <p class="exp-role">Graduate Teaching Assistant — CS651 Optimisation</p>
+        <ul class="buls">
+          <li>Grading and supporting <strong>CS651 — Optimisation in Computer Science</strong>, a graduate-level theory course. Supporting 40+ graduate students through complex proofs and algorithmic problem-solving.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item rv">
+      <div><p class="exp-period">Sep 2025 — Feb 2026</p><p class="exp-co">Chewy Inc.</p><p class="exp-loc">Boston, MA</p><span class="exp-badge on">AI Innovation Intern II</span></div>
+      <div>
+        <p class="exp-role">AI Innovation Intern II — Vet Diet AI Platform (Fall + Part-time)</p>
+        <div class="pills"><span class="pill hi">$1.4M saved</span><span class="pill hi">14K+ weekly</span><span class="pill hi">94% accuracy</span><span class="pill">92% user satisfaction</span><span class="pill">GPT-4 · Claude · Gemini eval</span></div>
+        <ul class="buls">
+          <li>Built and productionised an <strong>OCR + LLM prescription extraction system</strong> processing 14K+ weekly authorisations at 94% accuracy — evaluated GPT-4, Claude Sonnet, and Gemini to select optimal model.</li>
+          <li>Designed entity extraction pipeline (client, pet, clinic, vet data) with refill logic; <strong>validation scoring engine using fuzzy string matching and Snowflake pharmacy metadata</strong>.</li>
+          <li>Automated duplicate detection and routing — <strong>$1.4M in annual labour savings</strong>; led UAT achieving 92% user satisfaction.</li>
+          <li>Full-stack analytics dashboard in Python, TypeScript, GraphQL, React; S3 logging, error instrumentation, and production dial-up planning.</li>
+          <li>Invited to continue <strong>part-time post-internship</strong> to integrate solution into production-facing Chewy systems.</li>
+        </ul>
+        <div class="award-row">🏆 Runner-Up · Most Innovative Use of AI — Chewy Unbound: Innovator's Arena 2025</div>
+      </div>
+    </div>
+
+    <div class="exp-item rv">
+      <div><p class="exp-period">Jun — Aug 2025</p><p class="exp-co">Chewy Inc.</p><p class="exp-loc">Boston, MA</p><span class="exp-badge on">AI Innovation Intern II</span></div>
+      <div>
+        <p class="exp-role">AI Innovation Intern II — Pharmacy Intelligence (Summer)</p>
+        <div class="pills"><span class="pill hi">3M+ pharmacy records</span><span class="pill hi">72h → under 6h triage</span><span class="pill">95.5% XGBoost · 0.95 F1</span><span class="pill">10× faster vet review</span></div>
+        <ul class="buls">
+          <li>Standardised and analysed <strong>3M+ pharmacy records</strong> to power unified analytics and downstream LLM workflows.</li>
+          <li>Engineered <strong>multi-layered clinical knowledge graph in AWS Neptune</strong> — prescription clustering, summary generation, medicine prediction. Reduced vet triage from 72 hours to under 6.</li>
+          <li>Built <strong>LLM-driven veterinary assistant chatbot</strong> on Snowflake and Confluence data for privacy-compliant real-time clinical recommendations.</li>
+          <li>Trained and deployed <strong>XGBoost model at 95.5% accuracy, 0.95 F1</strong> for prescription approval prediction; presented live at Chewy's internal AI Showcase.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item rv">
+      <div><p class="exp-period">Jul 2022 — Jun 2024</p><p class="exp-co">IBM India</p><p class="exp-loc">Navi Mumbai, India</p><span class="exp-badge">Associate Developer</span></div>
+      <div>
+        <p class="exp-role">Associate Developer — Enterprise Backend Systems</p>
+        <div class="pills"><span class="pill">500+ enterprise users</span><span class="pill hi">40% data consistency ↑</span><span class="pill">MTTR reduced 35%</span><span class="pill hi">99.8% uptime</span><span class="pill">40+ scheduled jobs</span></div>
+        <ul class="buls">
+          <li>Developed <strong>C#.NET backend features</strong> for enterprise document workflows — transactional tracking, schema updates, dynamic form generation for 500+ users.</li>
+          <li>Engineered <strong>DB2–SQL Server integration pipelines</strong> for real-time data synchronisation; improved data consistency by 40%.</li>
+          <li>Directed offshore operations for <strong>40+ scheduled jobs</strong>; proactive alerting system reduced MTTR by 35%.</li>
+          <li>L2/L3 production support for 15+ enterprise applications — <strong>maintaining 99.8% uptime</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item rv">
+      <div><p class="exp-period">Jun — Aug 2021</p><p class="exp-co">Tata Consultancy Services</p><p class="exp-loc">India</p><span class="exp-badge">ML Intern</span></div>
+      <div>
+        <p class="exp-role">Machine Learning Intern</p>
+        <ul class="buls">
+          <li>Built an <strong>NLP feature for a TCS product</strong> using Natural Language Processing and Python — first production exposure to applied machine learning.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <div class="sec-in">
+    <p class="sec-label">Projects</p>
+    <h2 class="sec-h rv">Things I <em>actually shipped.</em></h2>
+    <div class="proj-grid rv">
+      <div class="proj-card"><p class="proj-num">01</p><span class="proj-badge">Research · Cisco · Ongoing</span><h3 class="proj-title">LLM Agent Adaptive Monitor</h3><p class="proj-desc">Dynamic monitoring system that evaluates LLM agent behaviour in real time — detecting drift, sabotage, and unexpected outputs. Research under Prof. Andrew McCallum in collaboration with Cisco.</p><div class="proj-stack"><span class="ptag">Python</span><span class="ptag">LLM Agents</span><span class="ptag">AI Safety</span><span class="ptag">Evaluation</span></div><span class="proj-arr">↗</span></div>
+      <div class="proj-card"><p class="proj-num">02</p><span class="proj-badge n">🏆 HackUMass XIII</span><h3 class="proj-title">UMunch — AI Wellness Assistant</h3><p class="proj-desc">Cross-platform wellness app with allergen-aware meal recommendations and voice-based food logging. 100+ beta users during demo. Gemini API, ElevenLabs voice, Snowflake real-time analytics.</p><div class="proj-stack"><span class="ptag">React Native</span><span class="ptag">FastAPI</span><span class="ptag">Snowflake</span><span class="ptag">Gemini API</span><span class="ptag">ElevenLabs</span></div><span class="proj-arr">↗</span></div>
+      <div class="proj-card"><p class="proj-num">03</p><span class="proj-badge n">Full-Stack · Production</span><h3 class="proj-title">CoverFolio — AI Resume & Portfolio Platform</h3><p class="proj-desc">Platform that converts résumés into portfolios and generates personalised cover letters via LLM fine-tuning. JWT auth, PostgreSQL, TypeScript frontend. Yes, the irony of this being on my portfolio is fully intentional.</p><div class="proj-stack"><span class="ptag">Django REST</span><span class="ptag">React</span><span class="ptag">PostgreSQL</span><span class="ptag">Gemini API</span><span class="ptag">TypeScript</span></div><span class="proj-arr">↗</span></div>
+      <div class="proj-card"><p class="proj-num">04</p><span class="proj-badge n">Enterprise · IBM</span><h3 class="proj-title">Enterprise Document Workflow System</h3><p class="proj-desc">Backend infrastructure for 500+ enterprise users at IBM. Real-time DB2–SQL Server sync, proactive alerting, 99.8% uptime. Not glamorous. Absolutely critical. The kind of work that teaches you what engineering actually means.</p><div class="proj-stack"><span class="ptag">C#.NET</span><span class="ptag">DB2</span><span class="ptag">SQL Server</span><span class="ptag">IIS</span></div><span class="proj-arr">↗</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <div class="sec-in">
+    <p class="sec-label">Skills</p>
+    <h2 class="sec-h rv">The full <em>stack.</em></h2>
+    <div class="sg rv">
+      <div class="sc"><p class="sct">Languages</p><ul class="sl"><li class="s">Python</li><li class="s">Java</li><li>C#</li><li>SQL</li><li>JavaScript</li><li>TypeScript</li></ul></div>
+      <div class="sc"><p class="sct">AI / ML</p><ul class="sl"><li class="s">LLM Integration</li><li class="s">RAG Pipelines</li><li>PyTorch · TensorFlow</li><li class="s">XGBoost</li><li>OpenCV · spaCy</li><li>OpenAI · Gemini API</li><li>OCR Preprocessing</li></ul></div>
+      <div class="sc"><p class="sct">Data Engineering</p><ul class="sl"><li class="s">Snowflake</li><li>PySpark</li><li>Apache Flink</li><li>ETL Pipelines</li><li class="s">AWS Neptune</li><li>PostgreSQL</li></ul></div>
+      <div class="sc"><p class="sct">Web & APIs</p><ul class="sl"><li class="s">FastAPI</li><li>Django REST</li><li>React · React Native</li><li>GraphQL</li><li>REST APIs</li><li>Spring Boot</li></ul></div>
+      <div class="sc"><p class="sct">Cloud & Infra</p><ul class="sl"><li class="s">AWS (EC2, S3, DynamoDB)</li><li>Docker</li><li>CI/CD</li><li>Linux</li><li>Git</li></ul></div>
+      <div class="sc"><p class="sct">Methods</p><ul class="sl"><li>System Design</li><li>Model Deployment</li><li>Fuzzy Matching</li><li>Agile</li><li>UAT Leadership</li><li>L2/L3 Support</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- RECOMMENDATIONS -->
+<section id="recommendations" class="section">
+  <div class="sec-in">
+    <p class="sec-label">Recommendations</p>
+    <h2 class="sec-h rv">What people <em>actually say.</em></h2>
+    <div class="recs-grid rv">
+      <div class="rec-card">
+        <div class="rec-qm">"</div>
+        <p class="rec-text">Shreyaa came up to speed quickly, demonstrated curiosity and <strong>strong technical judgment</strong>, and took real ownership of her work. She balanced a demanding academic course load while delivering a production-ready solution. I would recommend Shreyaa to any team looking for a <strong>driven, thoughtful, and highly capable engineer.</strong></p>
+        <div class="rec-author"><p class="rec-name">Bence Magyar</p><p class="rec-role">Director, Software Engineering · Chewy<br>Direct manager · Jan 2026</p><a href="https://linkedin.com/in/shreyaadani" target="_blank" class="rec-src">View on LinkedIn ↗</a></div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-qm">"</div>
+        <p class="rec-text">Working with Shreyaa to revolutionise the vet industry with AI was an absolutely joyous experience. Shreyaa's <strong>extensive experience with all facets of applied AI</strong> made creating our project a breeze. <strong>Intelligent, high-energy, hard worker that anyone would be lucky to hire.</strong></p>
+        <div class="rec-author"><p class="rec-name">Roman Pisani</p><p class="rec-role">2× AI Eng Intern at Chewy · Prev. SWE Intuit Credit Karma<br>Teammate · Aug 2025</p><a href="https://linkedin.com/in/shreyaadani" target="_blank" class="rec-src">View on LinkedIn ↗</a></div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-qm">"</div>
+        <p class="rec-text">Her technical expertise is impressive. A standout contribution was <strong>automating production checks, significantly improving incident response times</strong>. A quick learner with a growth mindset. Her <strong>leadership, communication skills, and team-oriented attitude</strong> have made a significant impact on our projects.</p>
+        <div class="rec-author"><p class="rec-name">Anil Sreerama</p><p class="rec-role">Associate Partner · IBM Consulting<br>Senior colleague · Mar 2025</p><a href="https://linkedin.com/in/shreyaadani" target="_blank" class="rec-src">View on LinkedIn ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREATIVES -->
+<section id="creatives" class="section">
+  <div class="sec-in">
+    <p class="sec-label">Creatives</p>
+    <h2 class="sec-h rv">Beyond <em>the code.</em></h2>
+    <p class="cr-intro rv">Engineering is what I do. This is who I am. A space for everything else — the playlists, the art, the anime obsessions, the things that make me a person and not just a résumé. <em>Coming soon.</em></p>
+    <div class="cr-grid rv">
+      <div class="cr-slot"><span class="cr-icon">🎵</span><p class="cr-title">Music & Playlists</p><p class="cr-desc">The soundtrack to late-night debugging, long commutes, and everything in between.</p><span class="cr-soon">Coming Soon</span></div>
+      <div class="cr-slot"><span class="cr-icon">🎮</span><p class="cr-title">Games & Anime</p><p class="cr-desc">Current obsessions, all-time favourites, and very strong opinions about which arc was best.</p><span class="cr-soon">Coming Soon</span></div>
+      <div class="cr-slot"><span class="cr-icon">🖼️</span><p class="cr-title">Art & Inspiration</p><p class="cr-desc">Things that catch my eye. Turns out spending time in galleries has consequences.</p><span class="cr-soon">Coming Soon</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="sec-in">
+    <p class="sec-label">Contact</p>
+    <div class="cg rv">
+      <div>
+        <h2 class="c-head">Let's build something<br><em>worth shipping.</em></h2>
+        <p class="c-sub">Looking for full-time SWE roles from <strong>May 2026</strong>. I want hard problems, strong engineering culture, and compensation that matches the output. If that's your team — let's talk.</p>
+        <div class="open-b">Open to: <span>SWE · Backend · AI/ML · Research Eng</span></div>
+      </div>
+      <div class="clinks">
+        <a href="mailto:sdani@umass.edu" class="clink"><span class="ci">✉</span><span class="cl-t">sdani@umass.edu</span><span class="ca">↗</span></a>
+        <a href="mailto:dani.shreyaa@gmail.com" class="clink"><span class="ci">✉</span><span class="cl-t">dani.shreyaa@gmail.com</span><span class="ca">↗</span></a>
+        <a href="https://linkedin.com/in/shreyaadani" target="_blank" class="clink"><span class="ci">in</span><span class="cl-t">linkedin.com/in/shreyaadani</span><span class="ca">↗</span></a>
+        <a href="https://github.com/shreyaadani" target="_blank" class="clink"><span class="ci">⌥</span><span class="cl-t">github.com/shreyaadani</span><span class="ca">↗</span></a>
+        <a href="tel:4135108040" class="clink"><span class="ci">☎</span><span class="cl-t">(413) 510-8040</span><span class="ca">↗</span></a>
+        <a href="assets/resume.pdf" target="_blank" class="clink"><span class="ci">↓</span><span class="cl-t">Download Résumé</span><span class="ca">↗</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="fl">Shreyaa Dani — May 2026</span>
+  <span class="fr">Every number on this site is real · © 2026</span>
+</footer>
+
+<script>
+const cur=document.getElementById('cur'),curR=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.proj-card,.stat,.tag,.sl li,.cr-slot,.rec-card,.edu-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cx'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cx'));
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*55);obs.unobserve(e.target);}});
+},{threshold:0.07,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40),{passive:true});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});
+});
+</script>
+</body>
+</html>

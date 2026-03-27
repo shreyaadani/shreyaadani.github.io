@@ -203,6 +203,35 @@ footer{padding:1.65rem var(--pad);border-top:1px solid var(--rule);display:flex;
 .fl{font-family:var(--serif);font-size:.98rem;font-style:italic;color:var(--muted);}
 .fr{font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--rule);}
 
+/* SCROLL PROGRESS BAR */
+#scroll-bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:300;pointer-events:none;}
+#scroll-bar::after{content:'';display:block;height:100%;width:var(--p,0%);background:var(--crimson);transition:width .08s linear;}
+
+/* ACTIVE NAV LINK */
+.nav-links a.active{color:var(--ink);}
+.nav-links a.active::after{content:'·';margin-left:.35em;color:var(--crimson);}
+
+/* HERO SCROLL CUE */
+.hero-cue{display:flex;align-items:center;gap:.65rem;margin-top:2.75rem;opacity:0;animation:up .5s ease 1.3s forwards;transition:opacity .35s ease;}
+.hero-cue.gone{opacity:0 !important;pointer-events:none;}
+.cue-line{width:1px;height:34px;background:var(--rule);position:relative;overflow:hidden;flex-shrink:0;}
+.cue-line::after{content:'';position:absolute;top:-100%;left:0;right:0;height:100%;background:var(--crimson);animation:cueDrop 1.9s ease-in-out infinite;}
+@keyframes cueDrop{0%{top:-100%;}65%,100%{top:110%;}}
+.cue-label{font-size:.59rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+
+/* BACK TO TOP */
+#back-top{
+  position:fixed;bottom:2rem;left:2rem;z-index:1000;
+  width:38px;height:38px;border:1px solid var(--rule);
+  background:var(--white);cursor:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;color:var(--muted);
+  opacity:0;transform:translateY(6px);pointer-events:none;
+  transition:opacity .25s,transform .25s,border-color .2s,color .2s;
+}
+#back-top.visible{opacity:1;transform:none;pointer-events:all;}
+#back-top:hover{border-color:var(--cm);color:var(--crimson);}
+
 /* REVEAL */
 .rv{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease;}
 .rv.in{opacity:1;transform:none;}
@@ -234,6 +263,7 @@ footer{padding:1.65rem var(--pad);border-top:1px solid var(--rule);display:flex;
 </style>
 </head>
 <body>
+<div id="scroll-bar"></div>
 <div id="cur"></div>
 <div id="cur-r"></div>
 
@@ -264,6 +294,10 @@ footer{padding:1.65rem var(--pad);border-top:1px solid var(--rule);display:flex;
    <div class="hero-ctas">
      <a href="#experience" class="btn-fill">See My Work</a>
      <a href="assets/ShreyaaDani_2026.pdf" class="btn-ghost" target="_blank">Download Résumé</a>
+  </div>
+  <div class="hero-cue" id="hero-cue">
+    <span class="cue-line"></span>
+    <span class="cue-label">Scroll to explore</span>
   </div>
 </div>
   <div class="hero-right">
@@ -527,6 +561,269 @@ footer{padding:1.65rem var(--pad);border-top:1px solid var(--rule);display:flex;
   <span class="fr">Every number on this site is real · © 2026</span>
 </footer>
 
+<button id="back-top" aria-label="Back to top">↑</button>
+
+<!-- PORTFOLIO CHATBOT WIDGET -->
+<script>
+(function () {
+  // ── CONFIG ─────────────────────────────────────────────────────────────────
+  // Replace with your deployed Render URL once live.
+  // For local dev, point to http://localhost:8000
+  const API_URL = 'https://shreyaa-portfolio-bot.onrender.com/chat';
+
+  const SUGGESTIONS = [
+    'What did she build at Chewy?',
+    'What is she researching at Cisco?',
+    'What are her strongest skills?',
+    'Is she available to hire?',
+  ];
+  // ───────────────────────────────────────────────────────────────────────────
+
+  /* ── STYLES ── */
+  const css = `
+    #pbot-btn {
+      position:fixed;bottom:2rem;right:2rem;z-index:1000;
+      width:52px;height:52px;border-radius:50%;
+      background:var(--crimson);border:none;cursor:none;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 20px rgba(139,26,43,.38);
+      transition:transform .2s,box-shadow .2s;
+    }
+    #pbot-btn:hover{transform:scale(1.1);box-shadow:0 6px 30px rgba(139,26,43,.5);}
+    #pbot-btn svg{width:21px;height:21px;fill:var(--white);pointer-events:none;}
+
+    #pbot-panel {
+      position:fixed;bottom:5.6rem;right:2rem;z-index:1000;
+      width:360px;
+      background:var(--white);border:1px solid var(--rule);
+      display:flex;flex-direction:column;
+      box-shadow:0 16px 56px rgba(28,25,23,.13);
+      transform:translateY(10px) scale(.98);opacity:0;
+      pointer-events:none;
+      transition:transform .22s ease,opacity .22s ease;
+    }
+    #pbot-panel.pbot-open{transform:none;opacity:1;pointer-events:all;}
+
+    .pbot-head{
+      padding:.85rem 1.15rem;border-bottom:1px solid var(--rule);
+      display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+    }
+    .pbot-head-l{display:flex;align-items:center;gap:.65rem;}
+    .pbot-dot{
+      width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;
+      box-shadow:0 0 0 3px rgba(34,197,94,.18);
+      animation:pbotPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pbotPulse{
+      0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.18);}
+      50%{box-shadow:0 0 0 6px rgba(34,197,94,.06);}
+    }
+    .pbot-title{font-size:.7rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink);}
+    .pbot-sub{font-size:.6rem;color:var(--muted);margin-top:.07rem;}
+    .pbot-close{
+      background:none;border:none;cursor:none;color:var(--muted);
+      font-size:1rem;line-height:1;padding:.25rem .3rem;
+      transition:color .18s;
+    }
+    .pbot-close:hover{color:var(--crimson);}
+
+    .pbot-msgs{
+      flex:1;overflow-y:auto;padding:.9rem 1.1rem;
+      display:flex;flex-direction:column;gap:.7rem;
+      min-height:180px;max-height:300px;
+    }
+    .pbot-msgs::-webkit-scrollbar{width:3px;}
+    .pbot-msgs::-webkit-scrollbar-thumb{background:var(--rule);border-radius:2px;}
+
+    .pbot-msg{font-size:.84rem;line-height:1.68;max-width:90%;}
+    .pbot-msg.bot{align-self:flex-start;color:var(--ink-2);}
+    .pbot-msg.user{
+      align-self:flex-end;
+      background:var(--ink);color:var(--white);
+      padding:.48rem .85rem;max-width:82%;
+    }
+    .pbot-msg.loading::after{
+      content:'▋';color:var(--crimson);
+      animation:pbotBlink .65s steps(1) infinite;
+    }
+    @keyframes pbotBlink{50%{opacity:0;}}
+
+    .pbot-chips{
+      display:flex;flex-wrap:wrap;gap:.32rem;
+      padding:.6rem 1.1rem;border-top:1px solid var(--rule);flex-shrink:0;
+    }
+    .pbot-chip{
+      font-size:.59rem;font-weight:500;letter-spacing:.04em;
+      padding:.26rem .68rem;border:1px solid var(--rule);
+      color:var(--muted);cursor:none;background:none;
+      transition:border-color .18s,color .18s,background .18s;white-space:nowrap;
+    }
+    .pbot-chip:hover{border-color:var(--cm);color:var(--crimson);background:var(--cl);}
+
+    .pbot-input-row{
+      padding:.7rem 1.1rem;border-top:1px solid var(--rule);
+      display:flex;gap:.5rem;flex-shrink:0;
+    }
+    .pbot-input{
+      flex:1;border:1px solid var(--rule);background:var(--white);
+      color:var(--ink);font-family:var(--sans);font-size:.82rem;
+      padding:.48rem .72rem;outline:none;cursor:text;
+      transition:border-color .18s;
+    }
+    .pbot-input:focus{border-color:var(--crimson);}
+    .pbot-input::placeholder{color:var(--muted);}
+    .pbot-send{
+      background:var(--crimson);border:none;color:var(--white);
+      padding:.48rem .9rem;cursor:none;
+      font-family:var(--sans);font-size:.68rem;font-weight:600;
+      letter-spacing:.08em;text-transform:uppercase;
+      transition:opacity .18s;flex-shrink:0;
+    }
+    .pbot-send:hover{opacity:.85;}
+    .pbot-send:disabled{opacity:.38;cursor:none;}
+
+    @media(max-width:480px){
+      #pbot-panel{width:calc(100vw - 2rem);right:1rem;bottom:4.8rem;}
+      #pbot-btn{bottom:1.2rem;right:1.2rem;}
+    }
+  `;
+  const styleEl = document.createElement('style');
+  styleEl.textContent = css;
+  document.head.appendChild(styleEl);
+
+  /* ── MARKUP ── */
+  const tpl = document.createElement('div');
+  tpl.innerHTML = `
+    <button id="pbot-btn" aria-label="Ask about Shreyaa" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+    </button>
+    <div id="pbot-panel" role="dialog" aria-label="Portfolio assistant" aria-modal="true">
+      <div class="pbot-head">
+        <div class="pbot-head-l">
+          <span class="pbot-dot" title="Online"></span>
+          <div>
+            <div class="pbot-title">Ask about Shreyaa</div>
+            <div class="pbot-sub">Portfolio assistant &middot; RAG&nbsp;&nbsp;powered</div>
+          </div>
+        </div>
+        <button class="pbot-close" aria-label="Close chat">&times;</button>
+      </div>
+      <div class="pbot-msgs" id="pbot-msgs" aria-live="polite">
+        <div class="pbot-msg bot">Hi! I'm Shreyaa's portfolio assistant. Ask me anything about her experience, projects, or availability — or pick a prompt below.</div>
+      </div>
+      <div class="pbot-chips" id="pbot-chips"></div>
+      <div class="pbot-input-row">
+        <input class="pbot-input" id="pbot-input" type="text" placeholder="Ask anything…" autocomplete="off" maxlength="500" />
+        <button class="pbot-send" id="pbot-send">Ask</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(tpl);
+
+  /* ── ELEMENTS ── */
+  const btn    = document.getElementById('pbot-btn');
+  const panel  = document.getElementById('pbot-panel');
+  const msgs   = document.getElementById('pbot-msgs');
+  const input  = document.getElementById('pbot-input');
+  const sendBtn = document.getElementById('pbot-send');
+  const chipsEl = document.getElementById('pbot-chips');
+
+  /* ── CHIPS ── */
+  SUGGESTIONS.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'pbot-chip';
+    b.textContent = s;
+    b.addEventListener('click', () => send(s));
+    chipsEl.appendChild(b);
+  });
+
+  /* ── CURSOR HOVER FX (matches portfolio's custom cursor system) ── */
+  tpl.querySelectorAll('button, .pbot-chip').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cx'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cx'));
+  });
+
+  /* ── TOGGLE ── */
+  function openPanel() {
+    panel.classList.add('pbot-open');
+    btn.setAttribute('aria-expanded', 'true');
+    input.focus();
+  }
+  function closePanel() {
+    panel.classList.remove('pbot-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', () =>
+    panel.classList.contains('pbot-open') ? closePanel() : openPanel()
+  );
+  panel.querySelector('.pbot-close').addEventListener('click', closePanel);
+
+  /* ── KEYBOARD ── */
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input.value); }
+  });
+  sendBtn.addEventListener('click', () => send(input.value));
+
+  /* ── CHAT LOGIC ── */
+  function addMsg(text, role, loading) {
+    const el = document.createElement('div');
+    el.className = 'pbot-msg ' + role + (loading ? ' loading' : '');
+    el.textContent = text;
+    msgs.appendChild(el);
+    msgs.scrollTop = msgs.scrollHeight;
+    return el;
+  }
+
+  async function send(text) {
+    text = text.trim();
+    if (!text || sendBtn.disabled) return;
+
+    input.value = '';
+    sendBtn.disabled = true;
+
+    addMsg(text, 'user', false);
+    const botEl = addMsg('', 'bot', true);
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      });
+
+      if (!res.ok) throw new Error('Request failed');
+
+      botEl.classList.remove('loading');
+
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop(); // keep incomplete line in buffer
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const raw = line.slice(6);
+          if (raw === '[DONE]') break;
+          try { botEl.textContent += JSON.parse(raw); } catch { botEl.textContent += raw; }
+          msgs.scrollTop = msgs.scrollHeight;
+        }
+      }
+    } catch {
+      botEl.classList.remove('loading');
+      botEl.textContent = "Something went wrong. Reach Shreyaa directly at sdani@umass.edu.";
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+})();
+</script>
+
 <script>
 const cur=document.getElementById('cur'),curR=document.getElementById('cur-r');
 let mx=0,my=0,rx=0,ry=0;
@@ -540,7 +837,36 @@ const obs=new IntersectionObserver(entries=>{
   entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*55);obs.unobserve(e.target);}});
 },{threshold:0.07,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
-window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40),{passive:true});
+// ── SCROLL: progress bar · active nav · back-to-top · hero cue ──────────────
+const scrollBar  = document.getElementById('scroll-bar');
+const backTop    = document.getElementById('back-top');
+const heroCue    = document.getElementById('hero-cue');
+const allSections = document.querySelectorAll('section[id]');
+const navAs      = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  const maxScroll = document.body.scrollHeight - innerHeight;
+
+  // Progress bar (CSS custom property drives the ::after width)
+  scrollBar.style.setProperty('--p', (scrollY / maxScroll * 100).toFixed(2) + '%');
+
+  // Nav border (existing behaviour kept here)
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 40);
+
+  // Active nav link — whichever section's top is nearest above viewport midpoint
+  let current = '';
+  allSections.forEach(s => { if (scrollY >= s.offsetTop - 220) current = s.id; });
+  navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+
+  // Back-to-top button
+  backTop.classList.toggle('visible', scrollY > 500);
+
+  // Hero scroll cue fades once you start scrolling
+  if (heroCue) heroCue.classList.toggle('gone', scrollY > 60);
+}, { passive: true });
+
+backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+// ────────────────────────────────────────────────────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});
 });

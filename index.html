@@ -179,6 +179,44 @@ nav.scrolled{border-color:var(--rule);}
 .cr-title{font-family:var(--serif);font-size:1.08rem;font-weight:400;color:var(--ink);}
 .cr-desc{font-size:.81rem;line-height:1.72;color:var(--muted);}
 .cr-soon{display:inline-block;margin-top:.35rem;font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);padding:.18rem .6rem;}
+/* music card */
+.cr-music{grid-column:1/-1;border:1px solid var(--rule);padding:2.25rem;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;background:var(--white);transition:border-color .2s;}
+.cr-music:hover{border-color:var(--cm);}
+.cr-music-left{display:flex;flex-direction:column;gap:1.25rem;}
+.cr-music-header{display:flex;align-items:baseline;gap:.85rem;}
+.cr-music-title{font-family:var(--serif);font-size:1.35rem;font-weight:400;color:var(--ink);}
+.cr-music-sub{font-size:.72rem;color:var(--muted);letter-spacing:.04em;}
+.cr-music-stats{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.cr-stat{display:flex;flex-direction:column;gap:.15rem;}
+.cr-stat-val{font-size:1.45rem;font-weight:600;color:var(--ink);line-height:1;}
+.cr-stat-label{font-size:.62rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+.cr-music-note{font-size:.75rem;color:var(--muted);line-height:1.65;margin-top:auto;padding-top:.75rem;border-top:1px solid var(--rule);}
+.cr-music-note a{color:var(--crimson);border-bottom:1px solid var(--cm);}
+.cr-artists{display:flex;flex-direction:column;gap:.45rem;}
+.cr-artist-row{display:flex;align-items:center;gap:.75rem;padding:.45rem 0;border-bottom:1px solid var(--rule);}
+.cr-artist-row:last-child{border-bottom:none;}
+.cr-artist-num{font-size:.65rem;color:var(--muted);width:1.2rem;text-align:right;flex-shrink:0;}
+.cr-artist-name{font-size:.875rem;font-weight:500;color:var(--ink);flex:1;}
+.cr-artist-bar-wrap{width:5rem;height:3px;background:var(--rule);flex-shrink:0;}
+.cr-artist-bar{height:100%;background:var(--crimson);opacity:.55;}
+.cr-artist-plays{font-size:.65rem;color:var(--muted);width:2.5rem;text-align:right;flex-shrink:0;}
+
+/* anime card */
+.cr-anime{border:1px solid var(--rule);padding:2.25rem;display:flex;flex-direction:column;gap:1.35rem;background:var(--white);transition:border-color .2s;}
+.cr-anime:hover{border-color:var(--cm);}
+.cr-anime-header{display:flex;align-items:baseline;gap:.85rem;}
+.cr-anime-title{font-family:var(--serif);font-size:1.08rem;font-weight:400;color:var(--ink);}
+.cr-anime-sub{font-size:.72rem;color:var(--muted);letter-spacing:.04em;}
+.cr-covers{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;}
+.cr-cover{position:relative;aspect-ratio:2/3;overflow:hidden;cursor:pointer;}
+.cr-cover img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+.cr-cover:hover img{transform:scale(1.06);}
+.cr-cover-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,25,23,.92) 0%,transparent 55%);opacity:0;transition:opacity .25s;display:flex;align-items:flex-end;padding:.5rem;}
+.cr-cover:hover .cr-cover-overlay{opacity:1;}
+.cr-cover-name{font-size:.58rem;line-height:1.35;color:#fafaf8;font-weight:500;}
+.cr-anime-note{font-size:.72rem;color:var(--muted);padding-top:.75rem;border-top:1px solid var(--rule);}
+.cr-anime-note a{color:var(--crimson);border-bottom:1px solid var(--cm);}
+.cr-covers-loading{font-size:.78rem;color:var(--muted);font-style:italic;}
 
 /* CONTACT */
 #contact{background:var(--white);}
@@ -249,6 +287,7 @@ footer{padding:1.65rem var(--pad);border-top:1px solid var(--rule);display:flex;
   .stat:nth-child(3){border-top:1px solid var(--rule);}
   .about-g,.cg{grid-template-columns:1fr;gap:2.5rem;}
   .edu-grid,.proj-grid,.recs-grid,.cr-grid{grid-template-columns:1fr;}
+  .cr-music{grid-template-columns:1fr;gap:1.75rem;}
   .exp-item{grid-template-columns:1fr;gap:1.1rem;}
   .exp-item::before{left:-1.5rem;right:-1.5rem;}
   .sg{grid-template-columns:1fr;}
@@ -525,10 +564,44 @@ footer{padding:1.65rem var(--pad);border-top:1px solid var(--rule);display:flex;
   <div class="sec-in">
     <p class="sec-label">Creatives</p>
     <h2 class="sec-h rv">Beyond <em>the code.</em></h2>
-    <p class="cr-intro rv">Music, art, anime, games—the things that make me a person and not just a résumé. <em>Coming soon.</em></p>
+    <p class="cr-intro rv">Music, art, anime, games—the things that make me a person and not just a résumé.</p>
     <div class="cr-grid rv">
-      <div class="cr-slot"><span class="cr-icon">🎵</span><p class="cr-title">Music & Playlists</p><p class="cr-desc">The soundtrack to late-night debugging and long commutes.</p><span class="cr-soon">Coming Soon</span></div>
-      <div class="cr-slot"><span class="cr-icon">🎮</span><p class="cr-title">Games & Anime</p><p class="cr-desc">Current obsessions, all-time favorites, and strong opinions about which arc was best.</p><span class="cr-soon">Coming Soon</span></div>
+
+      <!-- MUSIC CARD — full width -->
+      <div class="cr-music">
+        <div class="cr-music-left">
+          <div class="cr-music-header">
+            <p class="cr-music-title">What I'm listening to</p>
+            <span class="cr-music-sub">YT Music · last 8 months</span>
+          </div>
+          <div class="cr-music-stats">
+            <div class="cr-stat"><span class="cr-stat-val">4,946</span><span class="cr-stat-label">plays</span></div>
+            <div class="cr-stat"><span class="cr-stat-val">1,349</span><span class="cr-stat-label">artists</span></div>
+            <div class="cr-stat"><span class="cr-stat-val">652</span><span class="cr-stat-label">saved songs</span></div>
+            <div class="cr-stat"><span class="cr-stat-val">8–10pm</span><span class="cr-stat-label">peak hours</span></div>
+          </div>
+          <p class="cr-music-note">Stats from my personal Google Takeout export, parsed with <a href="https://github.com/shreyaadani/Yeti" target="_blank">Yeti</a> — a privacy-first insights tool I built. Your data never leaves your browser.</p>
+        </div>
+        <div class="cr-artists">
+          <div class="cr-artist-row"><span class="cr-artist-num">1</span><span class="cr-artist-name">Charli xcx</span><div class="cr-artist-bar-wrap"><div class="cr-artist-bar" style="width:100%"></div></div><span class="cr-artist-plays">129</span></div>
+          <div class="cr-artist-row"><span class="cr-artist-num">2</span><span class="cr-artist-name">Ado</span><div class="cr-artist-bar-wrap"><div class="cr-artist-bar" style="width:71%"></div></div><span class="cr-artist-plays">92</span></div>
+          <div class="cr-artist-row"><span class="cr-artist-num">3</span><span class="cr-artist-name">Kenshi Yonezu</span><div class="cr-artist-bar-wrap"><div class="cr-artist-bar" style="width:70%"></div></div><span class="cr-artist-plays">90</span></div>
+          <div class="cr-artist-row"><span class="cr-artist-num">4</span><span class="cr-artist-name">Chaar Diwaari</span><div class="cr-artist-bar-wrap"><div class="cr-artist-bar" style="width:64%"></div></div><span class="cr-artist-plays">83</span></div>
+          <div class="cr-artist-row"><span class="cr-artist-num">5</span><span class="cr-artist-name">BTS</span><div class="cr-artist-bar-wrap"><div class="cr-artist-bar" style="width:63%"></div></div><span class="cr-artist-plays">81</span></div>
+          <div class="cr-artist-row"><span class="cr-artist-num">6</span><span class="cr-artist-name">Mitski</span><div class="cr-artist-bar-wrap"><div class="cr-artist-bar" style="width:63%"></div></div><span class="cr-artist-plays">81</span></div>
+          <div class="cr-artist-row"><span class="cr-artist-num">7</span><span class="cr-artist-name">Billie Eilish</span><div class="cr-artist-bar-wrap"><div class="cr-artist-bar" style="width:51%"></div></div><span class="cr-artist-plays">66</span></div>
+          <div class="cr-artist-row"><span class="cr-artist-num">8</span><span class="cr-artist-name">IU</span><div class="cr-artist-bar-wrap"><div class="cr-artist-bar" style="width:47%"></div></div><span class="cr-artist-plays">60</span></div>
+        </div>
+      </div>
+
+      <div class="cr-anime" id="cr-anime-card">
+        <div class="cr-anime-header">
+          <p class="cr-anime-title">Anime I love</p>
+          <span class="cr-anime-sub">AniList · top rated</span>
+        </div>
+        <div class="cr-covers" id="cr-covers"><p class="cr-covers-loading">Loading...</p></div>
+        <p class="cr-anime-note">Pulled live from my <a href="https://anilist.co/user/kingdanziloo/animelist" target="_blank">AniList</a> — hover for titles.</p>
+      </div>
       <div class="cr-slot"><span class="cr-icon">🖼️</span><p class="cr-title">Art & Inspiration</p><p class="cr-desc">Things that catch my eye. Turns out spending time in galleries has consequences.</p><span class="cr-soon">Coming Soon</span></div>
     </div>
   </div>
@@ -870,6 +943,28 @@ backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smo
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});
 });
+</script>
+<script>
+(function(){
+  const QUERY = `{ MediaListCollection(userName:"kingdanziloo",type:ANIME,sort:SCORE_DESC){lists{name entries{score media{title{english romaji}coverImage{medium}siteUrl}}}} }`;
+  fetch('https://graphql.anilist.co',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:QUERY})})
+    .then(r=>r.json())
+    .then(d=>{
+      const lists = d?.data?.MediaListCollection?.lists || [];
+      const all = lists.flatMap(l=>l.entries);
+      const top = all.filter(e=>e.score>=9).sort((a,b)=>b.score-a.score).slice(0,10);
+      const el = document.getElementById('cr-covers');
+      if(!el||!top.length) return;
+      el.innerHTML = top.map(e=>{
+        const title = e.media.title.english || e.media.title.romaji;
+        return `<a class="cr-cover" href="${e.media.siteUrl}" target="_blank" rel="noopener">
+          <img src="${e.media.coverImage.medium}" alt="${title}" loading="lazy">
+          <div class="cr-cover-overlay"><span class="cr-cover-name">${title}</span></div>
+        </a>`;
+      }).join('');
+    })
+    .catch(()=>{ const el=document.getElementById('cr-covers'); if(el) el.innerHTML=''; });
+})();
 </script>
 </body>
 </html>

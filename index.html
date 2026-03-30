@@ -943,7 +943,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     .then(d=>{
       const lists = d?.data?.MediaListCollection?.lists || [];
       const all = lists.flatMap(l=>l.entries);
-      const top = all.filter(e=>e.score>=9).sort((a,b)=>b.score-a.score).slice(0,10);
+      const top = all.filter(e=>e.score>0).sort((a,b)=>b.score-a.score).slice(0,10);
       const el = document.getElementById('cr-covers');
       if(!el||!top.length) return;
       el.innerHTML = top.map(e=>{
